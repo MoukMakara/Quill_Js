@@ -1,4 +1,10 @@
-import React, { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Quill from "quill";
 
 const Editor = forwardRef(
@@ -14,35 +20,32 @@ const Editor = forwardRef(
     });
 
     useEffect(() => {
-      ref.current?.enable(!readOnly);
+      if (ref.current) {
+        ref.current.enable(!readOnly);
+      }
     }, [readOnly]);
 
     useEffect(() => {
-      const container = containerRef.current;
-      const editorContainer = container.appendChild(
-        document.createElement("div")
-      );
-      const quill = new Quill(editorContainer, {
-        theme: "snow",
-      });
+      const loadContentFromAPI = async () => {
+        try {
+          const response = await fetch("your-api-endpoint");
+          if (!response.ok) {
+            throw new Error("Failed to fetch content from API");
+          }
+          const { content } = await response.json();
+          if (ref.current) {
+            ref.current.setContents(content); // Assuming content is in Quill delta format
+          }
+        } catch (error) {
+          console.error("Error loading content from API:", error);
+          // Handle error
+        }
+      };
 
-      ref.current = quill;
-
-      if (defaultValueRef.current) {
-        quill.setContents(defaultValueRef.current);
-      }
-
-      quill.on("text-change", (...args) => {
-        onTextChangeRef.current?.(...args);
-      });
-
-      quill.on("selection-change", (...args) => {
-        onSelectionChangeRef.current?.(...args);
-      });
+      loadContentFromAPI();
 
       return () => {
-        ref.current = null;
-        container.innerHTML = "";
+        // Cleanup if needed
       };
     }, []);
 
