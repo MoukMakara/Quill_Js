@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
-import Editor from './Editor';
-import 'quill/dist/quill.core.css';
-import 'quill/dist/quill.snow.css';
+import React, { useRef, useState } from "react";
+import Editor from "./Editor";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
 
 const QuillComponent = () => {
   const [readOnly, setReadOnly] = useState(false);
-  const [description, setDescription] = useState(''); // State to hold description content
+  const [description, setDescription] = useState(""); // State to hold description content
   const quillRef = useRef();
   const token = import.meta.env.VITE_API_TOKEN; // Access the token from environment variables
 
@@ -13,37 +13,68 @@ const QuillComponent = () => {
   const handleSave = async () => {
     const editor = quillRef.current?.getEditor(); // Get the Quill editor instance
     if (!editor) {
-      console.error('Editor instance not available.');
+      console.error("Editor instance not available.");
       return;
     }
 
     const descriptionContent = editor.getText().trim(); // Get the text from the editor and trim it
 
+    if (!descriptionContent) {
+      console.error("Description content is empty.");
+      return;
+    }
+
+    const payload = {
+      sport_category: "2fe56924-fe8a-4ccd-8792-432fe3885692", // Example sport category ID
+      slug: "test", // Example slug
+      sport_name: "test", // Example sport name
+      latitude: 11.567386986931638, // Example latitude
+      longitude: 104.86818553686389, // Example longitude
+      seat_number: 7, // Example seat number
+      skill_level: "Intermediate", // Example skill level
+      description: descriptionContent, // Description content
+      image:
+        "http://136.228.158.126:50003/media/uploads/category_b229dac6-0775-4a74-b63a-980fca53494a.jpg", // Example image URL
+      reviews: "0 Reviews", // Example reviews
+      profile: "", // Example profile
+      cover: "", // Example cover
+      price: "Unknown", // Example price
+      contact_info: {
+        // Example contact info
+        first_phone: "098532222",
+        second_phone: "",
+        email: "",
+        website: "",
+        facebook: "",
+        telegram: "",
+        instagram: "",
+        twitter: "",
+        istad_account: "",
+      },
+    };
+
     try {
-      await fetch('http://136.228.158.126:50003/api/events/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`, // Use the token from environment variables
-        },
-        body: JSON.stringify({
-          description: descriptionContent, // Send only the description content
-          // Include other fields as needed
-          sport_category: '741de643-e108-4b09-8027-e3edb386846f', // Example field
-          title: 'New Event', // Example field
-          thumbnail: 'event_thumbnail.png', // Example field
-          location: 'New Location', // Example field
-          date: '2024-01-01T00:00:00Z', // Example field
-          contact_info: 'new_contact_info', // Example field
-          about: 'new_about', // Example field
-          ticket_price: 100.00, // Example field
-          ticket_reference: 'new_ticket_reference', // Example field
-          venue_map: 'new_venue_map', // Example field
-        }),
-      });
-      console.log('Content saved successfully');
+      const response = await fetch(
+        "http://136.228.158.126:50003/api/sportclubs/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Use the token from environment variables
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text(); // Get the response as text
+        console.error(`Network response was not ok: ${errorText}`);
+        throw new Error(`Network response was not ok: ${errorText}`);
+      }
+
+      console.log("Content saved successfully");
     } catch (error) {
-      console.error('Failed to save content', error);
+      console.error("Failed to save content", error);
     }
   };
 
@@ -87,7 +118,9 @@ const QuillComponent = () => {
         </button>
       </div>
       <div className="state mt-4">
-        <div className="state-title">Description: {description || 'Empty'} </div>
+        <div className="state-title">
+          Description: {description || "Empty"}{" "}
+        </div>
       </div>
     </div>
   );
