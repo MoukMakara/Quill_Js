@@ -63,7 +63,8 @@ const QuillComponent = () => {
       profile: profile, // Use form input value
       cover: cover, // Use form input value
       price: price, // Use form input value
-      contact_info: { // Use form input values
+      contact_info: {
+        // Use form input values
         first_phone: contactInfo.firstPhone,
         second_phone: contactInfo.secondPhone,
         email: contactInfo.email,
@@ -119,6 +120,7 @@ const QuillComponent = () => {
 
   return (
     <div className="ml-8 mt-8">
+      <label htmlFor="discription">discription</label>
       <Editor
         ref={quillRef} // Attach the ref to the Editor component
         readOnly={readOnly}
@@ -149,7 +151,9 @@ const QuillComponent = () => {
       </div>
       <div className="form mt-4">
         <div className="form-group mb-2">
-          <label htmlFor="sportCategory" className="block mb-1">Sport Category ID</label>
+          <label htmlFor="sportCategory" className="block mb-1">
+            Sport Category ID
+          </label>
           <input
             id="sportCategory"
             type="text"
@@ -159,7 +163,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="slug" className="block mb-1">Slug</label>
+          <label htmlFor="slug" className="block mb-1">
+            Slug
+          </label>
           <input
             id="slug"
             type="text"
@@ -169,7 +175,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="sportName" className="block mb-1">Sport Name</label>
+          <label htmlFor="sportName" className="block mb-1">
+            Sport Name
+          </label>
           <input
             id="sportName"
             type="text"
@@ -179,7 +187,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="latitude" className="block mb-1">Latitude</label>
+          <label htmlFor="latitude" className="block mb-1">
+            Latitude
+          </label>
           <input
             id="latitude"
             type="text"
@@ -189,7 +199,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="longitude" className="block mb-1">Longitude</label>
+          <label htmlFor="longitude" className="block mb-1">
+            Longitude
+          </label>
           <input
             id="longitude"
             type="text"
@@ -199,7 +211,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="seatNumber" className="block mb-1">Seat Number</label>
+          <label htmlFor="seatNumber" className="block mb-1">
+            Seat Number
+          </label>
           <input
             id="seatNumber"
             type="text"
@@ -209,7 +223,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="skillLevel" className="block mb-1">Skill Level</label>
+          <label htmlFor="skillLevel" className="block mb-1">
+            Skill Level
+          </label>
           <input
             id="skillLevel"
             type="text"
@@ -219,7 +235,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="image" className="block mb-1">Image URL</label>
+          <label htmlFor="image" className="block mb-1">
+            Image URL
+          </label>
           <input
             id="image"
             type="text"
@@ -229,7 +247,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="reviews" className="block mb-1">Reviews</label>
+          <label htmlFor="reviews" className="block mb-1">
+            Reviews
+          </label>
           <input
             id="reviews"
             type="text"
@@ -239,7 +259,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="profile" className="block mb-1">Profile</label>
+          <label htmlFor="profile" className="block mb-1">
+            Profile
+          </label>
           <input
             id="profile"
             type="text"
@@ -249,7 +271,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="cover" className="block mb-1">Cover</label>
+          <label htmlFor="cover" className="block mb-1">
+            Cover
+          </label>
           <input
             id="cover"
             type="text"
@@ -259,7 +283,9 @@ const QuillComponent = () => {
           />
         </div>
         <div className="form-group mb-2">
-          <label htmlFor="price" className="block mb-1">Price</label>
+          <label htmlFor="price" className="block mb-1">
+            Price
+          </label>
           <input
             id="price"
             type="text"
@@ -378,11 +404,6 @@ const QuillComponent = () => {
             }
             className="border p-2 w-full mb-2"
           />
-        </div>
-      </div>
-      <div className="state mt-4">
-        <div className="state-title">
-          Description: {description || "Empty"}{" "}
         </div>
       </div>
     </div>

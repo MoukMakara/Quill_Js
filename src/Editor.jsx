@@ -1,22 +1,27 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle, useEffect, useRef } from "react";
 import Quill from "quill";
 
 const Editor = forwardRef((props, ref) => {
-  const quillContainerRef = React.useRef();
+  const quillContainerRef = useRef();
+  const quillInstanceRef = useRef();
 
   useImperativeHandle(ref, () => ({
     getEditor() {
-      return quillContainerRef.current?.quill; // Access the Quill editor instance
+      return quillInstanceRef.current; // Access the Quill editor instance
     },
   }));
 
-  React.useEffect(() => {
-    const quill = new Quill(quillContainerRef.current, {
-      theme: "snow",
-      readOnly: props.readOnly,
-      // Other Quill configurations
-    });
-    quillContainerRef.current.quill = quill; // Attach Quill instance to ref
+  useEffect(() => {
+    if (!quillInstanceRef.current) { // Only initialize Quill if it hasn't been already
+      const quill = new Quill(quillContainerRef.current, {
+        theme: "snow",
+        readOnly: props.readOnly,
+        // Other Quill configurations
+      });
+      quillInstanceRef.current = quill; // Attach Quill instance to ref
+    } else {
+      quillInstanceRef.current.enable(!props.readOnly); // Update readOnly state
+    }
   }, [props.readOnly]);
 
   return <div ref={quillContainerRef} />;
