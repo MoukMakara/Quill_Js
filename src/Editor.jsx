@@ -1,35 +1,25 @@
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useEffect,
-} from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
 import Quill from "quill";
 
 const Editor = forwardRef((props, ref) => {
-  const quillRef = useRef();
+  const quillContainerRef = React.useRef();
 
   useImperativeHandle(ref, () => ({
-    getEditor: () => quillRef.current, // Return the Quill instance itself
-    getText: () => quillRef.current?.getText(), // Method to get the text
-    getHTML: () => quillRef.current?.root.innerHTML, // Method to get HTML content
+    getEditor() {
+      return quillContainerRef.current?.quill; // Access the Quill editor instance
+    },
   }));
 
-  useEffect(() => {
-    quillRef.current = new Quill("#editor-container", {
+  React.useEffect(() => {
+    const quill = new Quill(quillContainerRef.current, {
       theme: "snow",
       readOnly: props.readOnly,
-      modules: {
-        toolbar: true, // Enable the toolbar (set as per your requirement)
-      },
+      // Other Quill configurations
     });
-
-    return () => {
-      quillRef.current = null; // Clean up the Quill instance
-    };
+    quillContainerRef.current.quill = quill; // Attach Quill instance to ref
   }, [props.readOnly]);
 
-  return <div id="editor-container" />;
+  return <div ref={quillContainerRef} />;
 });
 
 export default Editor;
