@@ -1,55 +1,35 @@
-import React, { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useEffect,
+} from "react";
 import Quill from "quill";
 
-const Editor = forwardRef(
-  ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
-    const containerRef = useRef(null);
-    const defaultValueRef = useRef(defaultValue);
-    const onTextChangeRef = useRef(onTextChange);
-    const onSelectionChangeRef = useRef(onSelectionChange);
+const Editor = forwardRef((props, ref) => {
+  const quillRef = useRef();
 
-    useLayoutEffect(() => {
-      onTextChangeRef.current = onTextChange;
-      onSelectionChangeRef.current = onSelectionChange;
+  useImperativeHandle(ref, () => ({
+    getEditor: () => quillRef.current, // Return the Quill instance itself
+    getText: () => quillRef.current?.getText(), // Method to get the text
+    getHTML: () => quillRef.current?.root.innerHTML, // Method to get HTML content
+  }));
+
+  useEffect(() => {
+    quillRef.current = new Quill("#editor-container", {
+      theme: "snow",
+      readOnly: props.readOnly,
+      modules: {
+        toolbar: true, // Enable the toolbar (set as per your requirement)
+      },
     });
 
-    useEffect(() => {
-      ref.current?.enable(!readOnly);
-    }, [readOnly]);
+    return () => {
+      quillRef.current = null; // Clean up the Quill instance
+    };
+  }, [props.readOnly]);
 
-    useEffect(() => {
-      const container = containerRef.current;
-      const editorContainer = container.appendChild(
-        document.createElement("div")
-      );
-      const quill = new Quill(editorContainer, {
-        theme: "snow",
-      });
-
-      ref.current = quill;
-
-      if (defaultValueRef.current) {
-        quill.setContents(defaultValueRef.current);
-      }
-
-      quill.on("text-change", (...args) => {
-        onTextChangeRef.current?.(...args);
-      });
-
-      quill.on("selection-change", (...args) => {
-        onSelectionChangeRef.current?.(...args);
-      });
-
-      return () => {
-        ref.current = null;
-        container.innerHTML = "";
-      };
-    }, []);
-
-    return <div ref={containerRef}></div>;
-  }
-);
-
-Editor.displayName = "Editor";
+  return <div id="editor-container" />;
+});
 
 export default Editor;
