@@ -1,24 +1,37 @@
 import React, {
   forwardRef,
+<<<<<<< HEAD
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
+=======
+  useImperativeHandle,
+  useRef,
+  useEffect,
+>>>>>>> 86e8e98753e9c0f962278d6b3a284c9269d162ab
 } from "react";
 import Quill from "quill";
 
-const Editor = forwardRef(
-  ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
-    const containerRef = useRef(null);
-    const defaultValueRef = useRef(defaultValue);
-    const onTextChangeRef = useRef(onTextChange);
-    const onSelectionChangeRef = useRef(onSelectionChange);
+const Editor = forwardRef((props, ref) => {
+  const quillRef = useRef();
 
-    useLayoutEffect(() => {
-      onTextChangeRef.current = onTextChange;
-      onSelectionChangeRef.current = onSelectionChange;
+  useImperativeHandle(ref, () => ({
+    getEditor: () => quillRef.current, // Return the Quill instance itself
+    getText: () => quillRef.current?.getText(), // Method to get the text
+    getHTML: () => quillRef.current?.root.innerHTML, // Method to get HTML content
+  }));
+
+  useEffect(() => {
+    quillRef.current = new Quill("#editor-container", {
+      theme: "snow",
+      readOnly: props.readOnly,
+      modules: {
+        toolbar: true, // Enable the toolbar (set as per your requirement)
+      },
     });
 
+<<<<<<< HEAD
     useEffect(() => {
       if (ref.current) {
         ref.current.enable(!readOnly);
@@ -54,5 +67,14 @@ const Editor = forwardRef(
 );
 
 Editor.displayName = "Editor";
+=======
+    return () => {
+      quillRef.current = null; // Clean up the Quill instance
+    };
+  }, [props.readOnly]);
+
+  return <div id="editor-container" />;
+});
+>>>>>>> 86e8e98753e9c0f962278d6b3a284c9269d162ab
 
 export default Editor;
